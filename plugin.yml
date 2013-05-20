@@ -1,0 +1,19 @@
+name: Filmtacular
+main: org.gabeg.bukkit.filmtacular.Filmtacular
+version: 0.1
+
+commands:
+   ft:
+      description: This command provides control over Filmtacular features. Try /ft help to get the list of available options.
+      usage: /ft [command]
+      permission: filmtacular.control
+      permission-message: You don't have permission to adjust Filmtacular controls.
+
+permissions:
+    filmtacular.*:
+        description: Gives access to all Filmtacular commands
+        children:
+            filmtacular.control: true
+    filmtacular.control:
+        description: Allows you to toggle Filmtacular event listeners
+        default: op
