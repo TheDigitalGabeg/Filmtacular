@@ -4,34 +4,49 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Minecart;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
-import org.bukkit.event.vehicle.VehicleExitEvent;
 
 public class VehicleEventListener implements Listener {
 	   
+//	@EventHandler
+//	public void onVehicleExitEvent(VehicleExitEvent event) {
+//		
+//		// block adventure mode players from leaving moving minecarts
+//		if (Filmtacular.MinecartSeatbelts
+//		 && Minecart.class.isInstance(event.getVehicle())
+//		 && HumanEntity.class.isInstance(event.getVehicle().getPassenger())) {
+//
+//			if (((HumanEntity)event.getVehicle().getPassenger()).getGameMode() == GameMode.ADVENTURE
+//			 && ((Minecart)event.getVehicle()).getVelocity().length() > Filmtacular.MinecartSeatbeltTolerance) {
+//			 	event.setCancelled(true);
+//				if (Filmtacular.DebugMode)
+//	    			Filmtacular.Log("Filmtacular: prevented player " + ((Player)event.getVehicle().getPassenger()).getDisplayName() + " from leaving a moving minecart.");
+//		 	}
+//		}
+//	}
+	
 	@EventHandler
-	public void onVehicleExitEvent(VehicleExitEvent event) {
+	public void onPlayerInteractEntityEvent(PlayerInteractEntityEvent event) {
 		
 		// block adventure mode players from leaving moving minecarts
 		if (Filmtacular.MinecartSeatbelts
-		 && Minecart.class.isInstance(event.getVehicle())
-		 && HumanEntity.class.isInstance(event.getVehicle().getPassenger())) {
-			
-			if (((HumanEntity)event.getVehicle().getPassenger()).getGameMode() == GameMode.ADVENTURE
-			 && ((Minecart)event.getVehicle()).getVelocity().length() > Filmtacular.MinecartSeatbeltTolerance) {
-			 	event.setCancelled(true);
-				if (Filmtacular.DebugMode)
-	    			Filmtacular.Log("Filmtacular: prevented player " + ((Player)event.getVehicle().getPassenger()).getDisplayName() + " from leaving a moving minecart.");
-		 	}
+		 && Minecart.class.isInstance(event.getRightClicked())
+		 && event.getPlayer().getGameMode() == GameMode.ADVENTURE
+		 && event.getPlayer().getVehicle() ==  event.getRightClicked()
+		 && ((Minecart)event.getRightClicked()).getVelocity().length() > Filmtacular.MinecartSeatbeltTolerance) {
+	
+		 	event.setCancelled(true);
+			if (Filmtacular.DebugMode)
+    			Filmtacular.Log("Filmtacular: prevented player " + event.getPlayer().getDisplayName() + " from leaving a moving minecart.");
 		}
 	}
-	   
-	 @EventHandler
-	 public void onVehicleDamageEvent(VehicleDamageEvent event) {
+	
+	@EventHandler
+	public void onVehicleDamageEvent(VehicleDamageEvent event) {
 	 	
 	 	// block boat damage from adventure mode players or environmental effects
 	 	if (Filmtacular.SturdyBoats
@@ -54,7 +69,7 @@ public class VehicleEventListener implements Listener {
 			if (Filmtacular.DebugMode)
     			Filmtacular.Log("Filmtacular: prevented damage to a minecart.");
 	 	}
-	 }
+	}
  
 	@EventHandler
 	public void onVehicleDestroyEvent(VehicleDestroyEvent event) {
